@@ -1,0 +1,72 @@
+.dropdown-item {
+    width: 100%;
+}
+
+#availableTimes {
+    position: relative;
+    width: calc(100% - 40px);
+}
+
+.myAlert-top {
+    position: fixed;
+    /* top: 5px;  */
+    left:2%;
+    width: 96%;
+    z-index: 1032;
+}
+
+.myAlert-bottom {
+    position: fixed;
+    bottom: 5px;
+    left:2%;
+    width: 96%;
+    z-index: 1032;
+}
+#info-alerts {
+    margin-bottom: 0;
+    border-radius: 0;
+    background-color: black;
+    z-index: 1031;
+    /* display: none; */
+  }
+
+  .seat-row {
+      width: 100%;
+      /* margin-bottom: 5px; */
+      /* padding: auto; */
+      display: -webkit-flex;
+      display: flex;
+      -webkit-justify-content: center;
+      justify-content: center;
+      /* background-color: lightgrey; */
+  }
+
+  .seat-box {
+      width: 15%;
+      padding-bottom: 15%;
+      display: inline-block;
+      position: relative;
+      text-align: center;
+  }
+
+  .seat-number {
+      position: absolute;
+      top: 30%;
+      left: 40%;
+      color: black;
+      font-size: medium;
+      cursor: default;
+  }
+
+  .no-seat {
+      background-color: transparent;
+  }
+
+  .booked-seat {
+    background-color: cornflowerblue;
+    border: 0.5px solid #ddd;
+  }
+
+/* .alert {
+    
+} */
