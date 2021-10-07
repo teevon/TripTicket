@@ -41,7 +41,7 @@ $(document).ready(function(){
             success: function(response_data, status, xhr){
                 if(response_data.length > 0){
                     response_data.forEach(ts => {
-                    var tSlot = $('<a href="#" class="dropdown-item times" data-Id='+ts["Id"]+' data-timeslot='+ts["TimeSlot"]+'>'+ AmOrPm(ts['TimeSlot']) +'</a>');
+                    var tSlot = $('<a href="#" class="dropdown-item times" data-timeslotId='+ts["Id"]+' data-timeslot='+ts["TimeSlot"]+'>'+ AmOrPm(ts['TimeSlot']) +'</a>');
                     $("#timeSlot").siblings(".timeSlots").first().append(tSlot);
                     console.log(AmOrPm(ts['TimeSlot']));
                     });
@@ -53,13 +53,14 @@ $(document).ready(function(){
     $("#timeSlot").on("click", function(){
         $(this).siblings(".timeSlots").first().html("");
         LoadTimeSlots(parseInt($("#vctrId").val()), travelDateId);
-        
     });
 
     $(".timeSlots").on("click", ".times", function(e){
         e.preventDefault();
         e.stopPropagation();
-        $("#vehicleCategory-name").text($(this).attr("data-name"));
+        // set this event to trigger modal for seat selection
+        $("#seat-timeslot").text($(this).text());
+        $("#seat-selection").modal("show");
         $("#vehicleCategory-cost").text($(this).attr("data-cost"));
         booking["VehicleCategoryId"] = parseInt($(this).attr("data-vehicleCategoryId"));
         booking["VehicleCategory"] = $(this).attr("data-name");
@@ -70,6 +71,8 @@ $(document).ready(function(){
         vctr["Id"] = parseInt($(this).attr("data-vctrId"));
         $("#vctrId").val($(this).attr("data-vctrId"));
         $("#timeSlot").click();
+        // trigger modal here
+
     });
 
     $("#datetimepicker4").on("change.datetimepicker", function(e) {

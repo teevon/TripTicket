@@ -646,7 +646,7 @@ John Abraham</h5>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title text-center">Select an available seat</h4>
+                    <h4 class="modal-title text-center">Select an available seat (<span id="seat-timeslot">)</span></h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body" id="seat-boundary">
