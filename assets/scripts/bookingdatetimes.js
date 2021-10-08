@@ -1,6 +1,7 @@
+var travelDates = [];
+var travelDateId = null;
+var vctrtId = null;
 $(document).ready(function(){
-    var travelDates = [];
-    var travelDateId = null;
     function LoadBookingDates(){
         $.ajax({
             url: "http://localhost:55932/api/booking/days",
@@ -41,9 +42,8 @@ $(document).ready(function(){
             success: function(response_data, status, xhr){
                 if(response_data.length > 0){
                     response_data.forEach(ts => {
-                    var tSlot = $('<a href="#" class="dropdown-item times" data-timeslotId='+ts["Id"]+' data-timeslot='+ts["TimeSlot"]+'>'+ AmOrPm(ts['TimeSlot']) +'</a>');
+                    var tSlot = $('<a href="#" class="dropdown-item times" data-vctrtId='+ts["VCTRTiD"]+' data-timeslot='+ts["TimeSlot"]+'>'+ AmOrPm(ts['TimeSlot']) +'</a>');
                     $("#timeSlot").siblings(".timeSlots").first().append(tSlot);
-                    console.log(AmOrPm(ts['TimeSlot']));
                     });
                 }
             }
@@ -60,20 +60,59 @@ $(document).ready(function(){
         e.stopPropagation();
         // set this event to trigger modal for seat selection
         $("#seat-timeslot").text($(this).text());
-        $("#seat-selection").modal("show");
-        $("#vehicleCategory-cost").text($(this).attr("data-cost"));
-        booking["VehicleCategoryId"] = parseInt($(this).attr("data-vehicleCategoryId"));
-        booking["VehicleCategory"] = $(this).attr("data-name");
-        booking["Cost"] = parseInt($(this).attr("data-cost"));
-        vctr["VehicleCategoryId"] = parseInt($(this).attr("data-vehicleCategoryId"));
-        vctr["VehicleCategory"] = $(this).attr("data-name");
-        vctr["Cost"] = parseInt($(this).attr("data-cost"));
-        vctr["Id"] = parseInt($(this).attr("data-vctrId"));
-        $("#vctrId").val($(this).attr("data-vctrId"));
+        vctrtId = $(this).attr("data-vctrtId")
         $("#timeSlot").click();
-        // trigger modal here
 
+        $("#seat-selection").modal("show"); //Seat selection modal shows
     });
+
+    $("#seat-selection").on("shown.bs.modal", function(){
+        //perform ajax request
+        //populate seat status view
+        $.ajax({
+            url: "http://localhost:55932/api/booking/seatstatus?travelDayId="+travelDateId+"&vctrtId="+vctrtId,
+            method: "GET",
+            success: function(response, status, xhr){
+                //var seatStatusArrangement = response["ResponseData"];
+                var seatStatus = response["SeatStatus"];
+                var bookedSeats = seatStatus["BookedSeats"];
+                var pendingSeats = seatStatus["PendingSeats"];
+                var unBookedSeats = seatStatus["UnBookedSeats"];
+                var seats = response["Seats"];
+                var rows = response["Rows"];
+                var columns = response["Columns"]
+
+                $("#seat-boundary").html("");
+
+                for(let r = 0; r < rows; r++){
+                    var row = '<div class="seat-row"></div>';
+                    $("#seat-boundary").append(row);
+                    for(var c = 0; c < columns; c++){
+                        if(seats[r][c] == 0){
+                            var noSeat = '<div class="seat-box no-seat"></div>';
+                            $("#seat-boundary .seat-row").last().append(noSeat);
+                        } else {
+                            if(bookedSeats.indexOf(seats[r][c]) != -1)
+                              var seat = '<div class="seat-box booked-seat"><div class="seat-number">'+seats[r][c]+'</div></div>';
+                            else if(pendingSeats.indexOf(seats[r][c]) != -1)
+                              var seat = '<div class="seat-box pending-seat"><div class="seat-number">'+seats[r][c]+'</div></div>';
+                            else if(seats[r][c] == 'd')
+                              var seat = '<div class="seat-box driver-seat"><div class="seat-number">'+seats[r][c]+'</div></div>';
+                            else
+                              var seat = '<div class="seat-box unbooked-seat"><div class="seat-number">'+seats[r][c]+'</div></div>';
+
+                            $("#seat-boundary .seat-row").last().append(seat);
+                        }
+                    }
+                }
+            }
+        });
+    });
+
+    $("#seat-boundary").on("click", ".seat-row .unbooked-seat", function(e){
+        $("#seat-boundary .seat-row .unbooked-seat").removeClass("selected");
+        $(this).addClass("selected");
+    })
 
     $("#datetimepicker4").on("change.datetimepicker", function(e) {
         let bookingDay = ""+ e.date["_d"].getDate() + "";
@@ -84,6 +123,7 @@ $(document).ready(function(){
         if(res.length == 1)
            travelDateId = res[0]["Id"];
     });
+
     $("#testBtn").on("click", function(){
         console.log( "VCTRid = " +$("#vctrId").val());
     });

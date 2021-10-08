@@ -480,6 +480,21 @@ John Abraham</h5>
                     <!-- ============================================================== -->
                     <div class="row">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                            <button id="vehicleType" tabindex="-1" data-toggle="dropdown" type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split">
+                                Vehicle Type
+                            </button>
+                            <div id="vehCat" class="dropdown-menu vehicleCategory">
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                            <div class="card">
+                            <div class="card-body">
+                                <p class="display-7 font-weight-bold"><span id="vehicleCategory-name" class="text-muted d-inline-block"></span><span id="vehicleCategory-cost" class="text-dark float-right"></span></p>
+                            </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
                             <div class="card">
                                 <h5 class="card-header">Travel Date</h5>
                                 <div class="card-body">
@@ -510,43 +525,6 @@ John Abraham</h5>
                                          <div class="dropdown-divider"></div><a href="#" class="dropdown-item">Separated link</a> 
                                     </div> -->
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                            <button id="vehicleType" tabindex="-1" data-toggle="dropdown" type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split">
-                                Vehicle Type
-                            </button>
-                            <div id="vehCat" class="dropdown-menu vehicleCategory">
-                            </div>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                            <div class="card">
-                            <div class="card-body">
-                                <button id="seat-no" tabindex="-1" type="button" class="btn btn-primary btn-block">
-                                     Select available seat
-                                </button>
-                            </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-12 col-lg-4 col-md-4 col-sm-4 col-4"></div>
-                        <div class="col-xl-12 col-lg-4 col-md-4 col-sm-4 col-4">
-                            <p class="display-7 font-weight-bold"><span id="vehicleCategory-name" class="text-muted d-inline-block"></span><span id="vehicleCategory-cost" class="text-dark float-right"></span></p>
-                        </div>
-                        
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <input id="FullName" type="text" class="form-control personal-info" placeholder="Full name">
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <input id="Phone" type="text" class="form-control personal-info" placeholder="Phone">
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <input id="Email" type="text" class="form-control personal-info" placeholder="Email">
                             </div>
                         </div>
 
@@ -646,35 +624,45 @@ John Abraham</h5>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title text-center">Select an available seat (<span id="seat-timeslot">)</span></h4>
+                    <h4 class="modal-title text-center">Select an available seat ( <span id="seat-timeslot"> </span> )</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body" id="seat-boundary">
-                    <div class="seat-row">
-                        <div class="seat-box booked-seat"><div class="seat-number">2</div></div>
-                        <div class="seat-box no-seat"></div>
-                        <div class="seat-box no-seat"></div>
-                        <div class="seat-box booked-seat"><div class="seat-number">2</div></div>
+                </div>
+                <div class="modal-footer">
+                    <button id="seat-selected" class="btn btn-info btn-block">Proceed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" role="dialog" id="confirm-selection">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center">Enter contact information</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body" id="seat-boundary">
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+                        <div class="form-group">
+                            <input id="FullName" type="text" class="form-control personal-info" placeholder="Full name">
+                        </div>
                     </div>
-                    <div class="seat-row">
-                        <div class="seat-box booked-seat"><div class="seat-number">2</div></div>
-                        <div class="seat-box booked-seat"><div class="seat-number">2</div></div>
-                        <div class="seat-box no-seat"></div>
-                        <div class="seat-box booked-seat"><div class="seat-number">2</div></div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+                        <div class="form-group">
+                            <input id="Phone" type="text" class="form-control personal-info" placeholder="Phone">
+                        </div>
                     </div>
-                    <div class="seat-row">
-                        <div class="seat-box booked-seat"><div class="seat-number">2</div></div>
-                        <div class="seat-box booked-seat"><div class="seat-number">2</div></div>
-                        <div class="seat-box no-seat"></div>
-                        <div class="seat-box booked-seat"><div class="seat-number">2</div></div>
-                    </div><div class="seat-row">
-                        <div class="seat-box booked-seat"><div class="seat-number">2</div></div>
-                        <div class="seat-box booked-seat"><div class="seat-number">2</div></div>
-                        <div class="seat-box booked-seat"><div class="seat-number">2</div></div>
-                        <div class="seat-box booked-seat"><div class="seat-number">2</div></div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+                        <div class="form-group">
+                            <input id="Email" type="text" class="form-control personal-info" placeholder="Email">
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer"></div>
+                <div class="modal-footer">
+                    <button id="seat-selected" class="btn btn-info btn-block">Proceed</button>
+                </div>
             </div>
         </div>
     </div>

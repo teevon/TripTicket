@@ -1,10 +1,10 @@
+var allTerminals = [];
+var transportRoute = {"FromTerminalId" : null, "ToTerminalId" : null};
+var vctr = {"VehicleCategoryId": null, "TransportRouteId": null, "Cost": null, "Id":null};
+var vctrTime = {"VCTRId": null, "TimeSlot": null};
+var vehicleCategoryTransportRoute = [];
+var bookingDate = null;
 $(document).ready(function(){
-    var allTerminals = [];
-    var transportRoute = {"FromTerminalId" : null, "ToTerminalId" : null};
-    var vctr = {"VehicleCategoryId": null, "TransportRouteId": null, "Cost": null, "Id":null};
-    var vctrTime = {"VCTRId": null, "TimeSlot": null};
-    var vehicleCategoryTransportRoute = [];
-    var bookingDate = null;
     //var booking = {"Phone": "", "Email": "", "FullName": "","DTsVId":null}
     // application should some how tie payment reference to particular booking before confirming payment
     var booking = {
@@ -172,6 +172,8 @@ $(document).ready(function(){
         vctr["Cost"] = parseInt($(this).attr("data-cost"));
         vctr["Id"] = parseInt($(this).attr("data-vctrId"));
         $("#vctrId").val($(this).attr("data-vctrId"));
+        $("#timeSlot").siblings(".timeSlots").first().html("");
+        // clear timeslot dropdown
         $("#vehicleType").click();
     });
 
