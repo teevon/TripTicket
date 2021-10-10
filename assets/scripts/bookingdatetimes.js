@@ -60,7 +60,8 @@ $(document).ready(function(){
         e.stopPropagation();
         // set this event to trigger modal for seat selection
         $("#seat-timeslot").text($(this).text());
-        vctrtId = $(this).attr("data-vctrtId")
+        vctrtId = parseInt($(this).attr("data-vctrtId"));
+        pendingBooking["VCTRTid"] = vctrtId;
         $("#timeSlot").click();
 
         $("#seat-selection").modal("show"); //Seat selection modal shows
@@ -112,7 +113,13 @@ $(document).ready(function(){
     $("#seat-boundary").on("click", ".seat-row .unbooked-seat", function(e){
         $("#seat-boundary .seat-row .unbooked-seat").removeClass("selected");
         $(this).addClass("selected");
+        pendingBooking["SeatNo"] = parseInt($(this).text());
     })
+
+    $("#seat-selected").on("click", function(e){
+        $("#seat-selection").modal("hide");
+        $("#contact-information").modal("show");
+    });
 
     $("#datetimepicker4").on("change.datetimepicker", function(e) {
         let bookingDay = ""+ e.date["_d"].getDate() + "";
@@ -120,8 +127,10 @@ $(document).ready(function(){
         bookingDate = e.date["_d"].getFullYear()+"-"+(e.date["_d"].getMonth() + 1)+"-"+bookingDay;
         console.log(bookingDate);
         var res = travelDates.filter(obj => Object.values(obj).some(val => val.toString().includes(bookingDate)));
-        if(res.length == 1)
-           travelDateId = res[0]["Id"];
+        if(res.length == 1){
+            travelDateId = parseInt(res[0]["Id"]);
+            pendingBooking["TravelDateId"] = travelDateId;
+        }
     });
 
     $("#testBtn").on("click", function(){

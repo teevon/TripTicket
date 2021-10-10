@@ -636,7 +636,7 @@ John Abraham</h5>
         </div>
     </div>
 
-    <div class="modal fade" role="dialog" id="confirm-selection">
+    <div class="modal fade" role="dialog" id="contact-information">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -661,7 +661,7 @@ John Abraham</h5>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="seat-selected" class="btn btn-info btn-block">Proceed</button>
+                    <button id="" class="btn btn-info btn-block">Make Payment</button>
                 </div>
             </div>
         </div>

@@ -1,18 +1,22 @@
 var allTerminals = [];
-var transportRoute = {"FromTerminalId" : null, "ToTerminalId" : null};
-var vctr = {"VehicleCategoryId": null, "TransportRouteId": null, "Cost": null, "Id":null};
+var transportRoute = {"FromTerminalId" : null, "ToTerminalId" : null, "FromTerminal": null, "ToTerminal": null,
+"FromState": "", "ToState": "", "FromCity": "", "ToCity": "", "FromAreaName": "", "ToAreaName": ""};
+var vctr = {"VehicleCategoryId": null, "TransportRouteId": null, "Cost": null, "Id":null, };
 var vctrTime = {"VCTRId": null, "TimeSlot": null};
-var vehicleCategoryTransportRoute = [];
+var vehicleCategoryTransportRoutes = [];
 var bookingDate = null;
+var booking = {
+    "TransportRouteId": null, "VehicleCategoryId": null, "PaymentReference": "",
+    "Phone": "", "Email": "", "FullName": "", "FromTerminal": null, "ToTerminal": null,
+     "FromState": "", "ToState": "", "FromCity": "", "ToCity": "", "FromAreaName": "", "ToAreaName": "",
+    "VehicleCategory": "", "Cost": 0,"TravelDate": "", "TimeSlot": "", "SeatNo" : null
+};
+
+var pendingBooking = {
+    "TravelDateId": null, "VCTRTid": null, "SeatNo": null, "CustomerPhone": null, "CustomerEmail": null
+};
 $(document).ready(function(){
-    //var booking = {"Phone": "", "Email": "", "FullName": "","DTsVId":null}
     // application should some how tie payment reference to particular booking before confirming payment
-    var booking = {
-        "TransportRouteId": null, "VehicleCategoryId": null, "PaymentReference": "",
-        "Phone": "", "Email": "", "FullName": "", "FromTerminal": null, "ToTerminal": null,
-         "FromState": "", "ToState": "", "FromCity": "", "ToCity": "", "FromAreaName": "", "ToAreaName": "",
-        "VehicleCategory": "", "Cost": 0,"TravelDate": "", "TimeSlot": "", "DTsVId" : null
-    };
     function LoadTerminals(query, element){
         if((!transportRoute["FromTerminal"]) || (element.attr("id") == "fromTerminalsSearch")){
             transportRoute["FromTerminal"] = null;
@@ -67,11 +71,11 @@ $(document).ready(function(){
             url: "http://localhost:55932/api/TransportRoute/VCTR/RouteTerminalIds?froId="+RouteTerminals["FromTerminal"]+"&toId="+RouteTerminals["ToTerminal"],
             method: "GET",
             success: function(response_data, status, xhr){
-                vehicleCategoryTransportRoute = [];
+                vehicleCategoryTransportRoutes = [];
                 var VCTRs = response_data["ResponseData"];
                 vctr["TransportRouteId"] = VCTRs[0]["TransportRouteId"];
                 VCTRs.forEach(element => {
-                    vehicleCategoryTransportRoute.push({"Name" : element["VehicleCategoryName"], "Id": element["Id"],
+                    vehicleCategoryTransportRoutes.push({"Name" : element["VehicleCategoryName"], "Id": element["Id"],
                     "CategoryId" : element["VehicleCategoryId"], "RouteId": element["TransportRouteId"], "Cost" : element["Cost"]})
                 });
             }
@@ -152,7 +156,7 @@ $(document).ready(function(){
     $("#vehicleType").on('click', function(){
         $(this).siblings(".vehicleCategory").first().html("");
         if(transportRoute["FromTerminal"] && transportRoute["ToTerminal"]){
-            vehicleCategoryTransportRoute.forEach(vc => {
+            vehicleCategoryTransportRoutes.forEach(vc => {
                 var vCategory = $('<a href="#" class="dropdown-item vehicles" data-vctrId='+vc["Id"]+' data-vehicleCategoryId='+vc["CategoryId"]+' data-cost='+vc["Cost"]+' data-name="'+vc["Name"]+'" data-routeId='+vc["RouteId"]+'>'+vc["Name"]+ '&nbsp;&nbsp; ('+vc["Cost"]+')</a>');
                 $(this).siblings(".vehicleCategory").first().append(vCategory);
             });
