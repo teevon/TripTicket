@@ -1,28 +1,25 @@
 var allTerminals = [];
 var transportRoute = {"FromTerminalId" : null, "ToTerminalId" : null, "FromTerminal": null, "ToTerminal": null,
-"FromState": "", "ToState": "", "FromCity": "", "ToCity": "", "FromAreaName": "", "ToAreaName": ""};
+"FromState": "", "ToState": "", "FromCity": "", "ToCity": "", "FromAreaName": "", "ToAreaName": "", "Id": null};
 var vctr = {"VehicleCategoryId": null, "TransportRouteId": null, "Cost": null, "Id":null, };
-var vctrTime = {"VCTRId": null, "TimeSlot": null};
+var vctrTime = {"VCTRId": null, "TimeSlot": null, "Id": null};
 var vehicleCategoryTransportRoutes = [];
 var bookingDate = null;
 var booking = {
-    "TransportRouteId": null, "VehicleCategoryId": null, "PaymentReference": "",
-    "Phone": "", "Email": "", "FullName": "", "FromTerminal": null, "ToTerminal": null,
-     "FromState": "", "ToState": "", "FromCity": "", "ToCity": "", "FromAreaName": "", "ToAreaName": "",
-    "VehicleCategory": "", "Cost": 0,"TravelDate": "", "TimeSlot": "", "SeatNo" : null
+    "VCTRTid": null, "PaymentReference": "", "CustomerPhone": "", "CustomerEmail": "", "FullName": "", "TravelDateId": "", "SeatNo" : null
 };
 
 var pendingBooking = {
-    "TravelDateId": null, "VCTRTid": null, "SeatNo": null, "CustomerPhone": null, "CustomerEmail": null
+    "TravelDateId": null, "VCTRTid": null, "SeatNo": null, "CustomerPhone": null, "CustomerEmail": null, "FullName": null
 };
 $(document).ready(function(){
     // application should some how tie payment reference to particular booking before confirming payment
     function LoadTerminals(query, element){
-        if((!transportRoute["FromTerminal"]) || (element.attr("id") == "fromTerminalsSearch")){
-            transportRoute["FromTerminal"] = null;
+        if((!transportRoute["FromTerminalId"]) || (element.attr("id") == "fromTerminalsSearch")){
+            transportRoute["FromTerminalId"] = null;
         }
         $.ajax({
-            url: "http://localhost:55932/api/terminals/search?q="+query+"&froId="+ transportRoute["FromTerminal"],
+            url: "http://localhost:55932/api/terminals/search?q="+query+"&froId="+ transportRoute["FromTerminalId"],
             method: "GET",
             success: function(response_data, status, xhr){
                 allTerminals = response_data["ResponseData"];
@@ -68,7 +65,7 @@ $(document).ready(function(){
 
     function GetVehicleCategories(RouteTerminals){
         $.ajax({
-            url: "http://localhost:55932/api/TransportRoute/VCTR/RouteTerminalIds?froId="+RouteTerminals["FromTerminal"]+"&toId="+RouteTerminals["ToTerminal"],
+            url: "http://localhost:55932/api/TransportRoute/VCTR/RouteTerminalIds?froId="+RouteTerminals["FromTerminalId"]+"&toId="+RouteTerminals["ToTerminalId"],
             method: "GET",
             success: function(response_data, status, xhr){
                 vehicleCategoryTransportRoutes = [];
@@ -126,22 +123,19 @@ $(document).ready(function(){
         $("#toTerminalsSearch").removeAttr('disabled');
         var siblingInput = $(this).siblings("input.terminals-search").first();
         $(this).remove();
-        transportRoute["FromTerminal"] = $("#fromTerminalsSearch").siblings(".selected-terminal").first().attr("data-id");
-        transportRoute["ToTerminal"] = $("#toTerminalsSearch").siblings(".selected-terminal").first().attr("data-id");
-        booking["FromTerminal"] = $("#fromTerminalsSearch").siblings(".selected-terminal").first().attr("data-id");
-        booking["ToTerminal"] = $("#toTerminalsSearch").siblings(".selected-terminal").first().attr("data-id");
-        booking["FromCity"] = $("#fromTerminalsSearch").siblings(".selected-terminal").first().attr("data-city");
-        booking["ToCity"] = $("#toTerminalsSearch").siblings(".selected-terminal").first().attr("data-city");
-        booking["FromState"] = $("#fromTerminalsSearch").siblings(".selected-terminal").first().attr("data-state");
-        booking["ToState"] = $("#toTerminalsSearch").siblings(".selected-terminal").first().attr("data-state");
-        booking["FromAreaName"] = $("#fromTerminalsSearch").siblings(".selected-terminal").first().attr("data-areaName");
-        booking["ToAreaName"] = $("#toTerminalsSearch").siblings(".selected-terminal").first().attr("data-areaName");
+        transportRoute["FromTerminalId"] = $("#fromTerminalsSearch").siblings(".selected-terminal").first().attr("data-id");
+        transportRoute["ToTerminalId"] = $("#toTerminalsSearch").siblings(".selected-terminal").first().attr("data-id");
+        transportRoute["FromCity"] = $("#fromTerminalsSearch").siblings(".selected-terminal").first().attr("data-city");
+        transportRoute["ToCity"] = $("#toTerminalsSearch").siblings(".selected-terminal").first().attr("data-city");
+        transportRoute["FromState"] = $("#fromTerminalsSearch").siblings(".selected-terminal").first().attr("data-state");
+        transportRoute["ToState"] = $("#toTerminalsSearch").siblings(".selected-terminal").first().attr("data-state");
+        transportRoute["FromAreaName"] = $("#fromTerminalsSearch").siblings(".selected-terminal").first().attr("data-areaName");
+        transportRoute["ToAreaName"] = $("#toTerminalsSearch").siblings(".selected-terminal").first().attr("data-areaName");
         $(".vehicleCategory").first().html("");
         if(siblingInput.attr("id") == "toTerminalsSearch"){
             GetVehicleCategories(transportRoute);
         } else{
-            booking["TransportRouteId"] = null;
-            booking["VehicleCategoryId"] = null;
+            booking["VCTRTid"] = null;
             vctr["TransportRouteId"] = null;
             vctr["VehicleCategoryId"] = null;
             vctr["Cost"] = null;
@@ -155,7 +149,9 @@ $(document).ready(function(){
 
     $("#vehicleType").on('click', function(){
         $(this).siblings(".vehicleCategory").first().html("");
-        if(transportRoute["FromTerminal"] && transportRoute["ToTerminal"]){
+        console.log("VehicleCategoryTransportRoutes: ");
+        console.log(vehicleCategoryTransportRoutes);
+        if(transportRoute["FromTerminalId"] && transportRoute["ToTerminalId"]){
             vehicleCategoryTransportRoutes.forEach(vc => {
                 var vCategory = $('<a href="#" class="dropdown-item vehicles" data-vctrId='+vc["Id"]+' data-vehicleCategoryId='+vc["CategoryId"]+' data-cost='+vc["Cost"]+' data-name="'+vc["Name"]+'" data-routeId='+vc["RouteId"]+'>'+vc["Name"]+ '&nbsp;&nbsp; ('+vc["Cost"]+')</a>');
                 $(this).siblings(".vehicleCategory").first().append(vCategory);
@@ -168,9 +164,6 @@ $(document).ready(function(){
         e.stopPropagation();
         $("#vehicleCategory-name").text($(this).attr("data-name"));
         $("#vehicleCategory-cost").text($(this).attr("data-cost"));
-        booking["VehicleCategoryId"] = parseInt($(this).attr("data-vehicleCategoryId"));
-        booking["VehicleCategory"] = $(this).attr("data-name");
-        booking["Cost"] = parseInt($(this).attr("data-cost"));
         vctr["VehicleCategoryId"] = parseInt($(this).attr("data-vehicleCategoryId"));
         vctr["VehicleCategory"] = $(this).attr("data-name");
         vctr["Cost"] = parseInt($(this).attr("data-cost"));
@@ -201,67 +194,16 @@ $(document).ready(function(){
         $("#confirm-fullname").text(booking["FullName"]);
         $("#confirm-phone").text(booking["Phone"]);
         $("#confirm-email").text(booking["Email"]);
-        $("#confirm-state-from").text(booking["FromState"]);
-        $("#confirm-state-to").text(booking["ToState"]);
-        $("#confirm-city-areaname-fro").text(booking["FromCity"] + " => " + booking["FromAreaName"]);
-        $("#confirm-city-areaname-to").text(booking["ToCity"] + " => " + booking["ToAreaName"]);
+        $("#confirm-state-from").text(transportRoute["FromState"]);
+        $("#confirm-state-to").text(transportRoute["ToState"]);
+        $("#confirm-city-areaname-fro").text(transportRoute["FromCity"] + " => " + transportRoute["FromAreaName"]);
+        $("#confirm-city-areaname-to").text(transportRoute["ToCity"] + " => " + transportRoute["ToAreaName"]);
         $("#confirm-travelDate").text(booking["TravelDate"]);
         $("#confirm-vehicleCategory").text(booking["VehicleCategory"]);
         $("#confirm-vehicleCost").text(booking["Cost"]);
     });
 
-    $("#paystack-pay").on("click", function(){
-        $.ajax({
-            url: "http://localhost:55932/api/payment/reference",
-            method: "GET",
-            success: function(response_data, status, xhr){
-                $("#confirm-booking").modal("hide");
-                payWithPaystack(response_data["ResponseData"]);
-            }
-        });
-    });
-
-    function payWithPaystack(paymentReference){
-		let handler = PaystackPop.setup({
-			key: 'pk_test_acedf4103ce109ffc0d05ab0f3cfd44767a3e5fb',
-			email: booking["Email"],
-			amount: booking["Cost"] * 100,
-			ref: paymentReference,
-			metadata: {
-				custom_fields: [
-				   {
-				   	 display_name: "Mobile Number",
-				   	 variable_name: "mobile_number",
-				   	 value: booking["Phone"]
-				   }
-				]
-			},
-			callback: function(response) {
-                $.ajax({
-                    url: "http://localhost:55932/api/payment/store",
-                    method: "POST",
-                    data: {
-                        "AmountPaid" : booking["Cost"], "TransportRouteId" : booking["TransportRouteId"],
-                        "VehicleCategoryId" : booking["VehicleCategoryId"], "PaymentReference" : response.reference,
-                        "CustomerName": booking["FullName"], "CustomerEmail": booking["Email"], "CustomerPhone": booking["Phone"]
-                    },
-                    success : function(response_data, status, xhr){
-                        //self.location="verify.php?paymentReference="+paymentReference;
-                        console.log("Response Data: ");
-                        console.log(response_data);
-                        console.log("Status: ");
-                        console.log(status);
-                        console.log("XHR: ");
-                        console.log(xhr);
-                    }
-                })
-			},
-			onClose: function(){
-                //self.location="verify.php?paymentReference="+paymentReference;
-			}
-		});
-		handler.openIframe();
-    }
+    
     
     function myAlertTop(){
         $("#info-alerts").show();

@@ -644,24 +644,24 @@ John Abraham</h5>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body" id="seat-boundary">
-                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="form-group">
                             <input id="FullName" type="text" class="form-control personal-info" placeholder="Full name">
                         </div>
                     </div>
-                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="form-group">
                             <input id="Phone" type="text" class="form-control personal-info" placeholder="Phone">
                         </div>
                     </div>
-                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="form-group">
                             <input id="Email" type="text" class="form-control personal-info" placeholder="Email">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="" class="btn btn-info btn-block">Make Payment</button>
+                    <button id="make-payment" class="btn btn-info btn-block">Make Payment</button>
                 </div>
             </div>
         </div>
@@ -682,5 +682,6 @@ John Abraham</h5>
     <script src="../assets/libs/js/main-js.js"></script>
     <script src="../assets/scripts/terminals.js"></script>
     <script src="../assets/scripts/bookingdatetimes.js"></script>
+    <script src="../assets/scripts/booking.js"></script>
 </body>
 </html>

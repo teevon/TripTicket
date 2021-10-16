@@ -62,6 +62,7 @@ $(document).ready(function(){
         $("#seat-timeslot").text($(this).text());
         vctrtId = parseInt($(this).attr("data-vctrtId"));
         pendingBooking["VCTRTid"] = vctrtId;
+        pendingBooking["TravelDateId"] = travelDateId;
         $("#timeSlot").click();
 
         $("#seat-selection").modal("show"); //Seat selection modal shows
@@ -127,6 +128,7 @@ $(document).ready(function(){
         bookingDate = e.date["_d"].getFullYear()+"-"+(e.date["_d"].getMonth() + 1)+"-"+bookingDay;
         console.log(bookingDate);
         var res = travelDates.filter(obj => Object.values(obj).some(val => val.toString().includes(bookingDate)));
+        console.log(res);
         if(res.length == 1){
             travelDateId = parseInt(res[0]["Id"]);
             pendingBooking["TravelDateId"] = travelDateId;
