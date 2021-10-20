@@ -5,7 +5,19 @@ creates booking
 sends notification of booking to email and phone
 */
 $(document).ready(function(){
-    function payAndBook(seatBooking){
+
+    $("#make-payment").on("click", function(e){
+        pendingBooking["CustomerPhone"] = $("#Phone").val();
+        pendingBooking["CustomerEmail"] = $("#Email").val();
+        booking["FullName"] = $("#FullName").val();
+        $("#contact-information").modal("hide");
+        $("#Phone").val("");
+        $("#Email").val("");
+        $("#FullName").val("");
+        payAndBook();
+    });
+
+    function payAndBook(){
         $.ajax({
             url: "http://localhost:55932/api/booking/create/pendingbooking",
             method: "POST",
@@ -18,47 +30,31 @@ $(document).ready(function(){
                 "FullName": pendingBooking["FullName"]
             },
             success : function(response_data, status, xhr){
-                console.log(response_data);
+                var pending = response_data["ResponseData"];
                 $.ajax({
                     url: "http://localhost:55932/api/payment/reference",
                     method: "GET",
                     success: function(response, status, xhr){
                         //$("#confirm-booking").modal("hide");
                         console.log(response);
-                        payWithPaystack(response["ResponseData"]);
+                        booking["CustomerEmail"] = pending["CustomerEmail"];
+                        booking["CustomerPhone"] = pending["CustomerPhone"];
+                        booking["PaymentReference"] = response;
+                        booking["SeatNo"] = pending["SeatNo"];
+                        booking["DVCTRTid"] = pending["DVCTRTid"]
+                        payWithPaystack(response["ResponseData"], pending["AmountDue"]);
                     }
                 });
             }
         });
     }
 
-    $("#make-payment").on("click", function(e){
-        pendingBooking["CustomerPhone"] = $("#Phone").val();
-        pendingBooking["CustomerEmail"] = $("#Email").val();
-        booking["FullName"] = $("#FullName").val();
-        $("#contact-information").modal("hide");
-        $("#Phone").val("");
-        $("#Email").val("");
-        $("#FullName").val("");
-        payAndBook(pendingBooking);
-    });
-
-    $("#paystack-pay").on("click", function(){
-        $.ajax({
-            url: "http://localhost:55932/api/payment/reference",
-            method: "GET",
-            success: function(response_data, status, xhr){
-                $("#confirm-booking").modal("hide");
-                payWithPaystack(response_data["ResponseData"]);
-            }
-        });
-    });
-
-    function payWithPaystack(paymentReference){
+    function payWithPaystack(paymentReference, amountDue){
+        //validate booking parameters first before initiating payment
 		let handler = PaystackPop.setup({
 			key: 'pk_test_acedf4103ce109ffc0d05ab0f3cfd44767a3e5fb',
 			email: pendingBooking["CustomerEmail"],
-			amount: vctr["Cost"] * 100,
+			amount: amountDue * 100,
 			ref: paymentReference,
 			metadata: {
 				custom_fields: [
@@ -70,21 +66,29 @@ $(document).ready(function(){
 				]
 			},
 			callback: function(response) {
+                //after payment, store payment record and then make booking
+                console.log(response);
                 $.ajax({
                     url: "http://localhost:55932/api/payment/store",
                     method: "POST",
                     data: {
-                        "AmountPaid" : vctr["Cost"], "DayVCTRTId" : bookpendingBookinging["TransportRouteId"],
+                        "AmountPaid" : response.amount, "TravelDayId" : pendingBooking["TravelDateId"], "VCTRTId" : pendingBooking["VCTRTid"],
                         "PaymentReference" : response.reference, "CustomerName": booking["FullName"], "CustomerEmail": booking["Email"], "CustomerPhone": booking["Phone"]
                     },
                     success : function(response_data, status, xhr){
-                        //self.location="verify.php?paymentReference="+paymentReference;
-                        console.log("Response Data: ");
-                        console.log(response_data);
-                        console.log("Status: ");
-                        console.log(status);
-                        console.log("XHR: ");
-                        console.log(xhr);
+                        //make booking
+                        $.ajax({
+                            url: "http://localhost:55932/api/booking/create",
+                            method: "POST",
+                            data: {
+                                "DVCTRTid" : booking["DVCTRTid"], "SeatNo": booking["SeatNo"], "AmountPaid": response.amount,
+                                "PaymentReference" : response.reference, "CustomerPhone": booking["CustomerPhone"],
+                                "CustomerEmail": booking["CustomerEmail"], "FullName" : booking["FullName"]
+                            },
+                            success : function(data, stat, xr){
+                                //process results from bookig attempt
+                            }
+                        });
                     }
                 })
 			},
@@ -94,4 +98,15 @@ $(document).ready(function(){
 		});
 		handler.openIframe();
     }
+
+    $("#paystack-pay").on("click", function(){
+        $.ajax({
+            url: "http://localhost:55932/api/payment/reference",
+            method: "GET",
+            success: function(response_data, status, xhr){
+                $("#confirm-booking").modal("hide");
+                payWithPaystack(response_data["ResponseData"]);
+            }
+        });
+    });
 });

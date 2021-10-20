@@ -6,7 +6,7 @@ var vctrTime = {"VCTRId": null, "TimeSlot": null, "Id": null};
 var vehicleCategoryTransportRoutes = [];
 var bookingDate = null;
 var booking = {
-    "VCTRTid": null, "PaymentReference": "", "CustomerPhone": "", "CustomerEmail": "", "FullName": "", "TravelDateId": "", "SeatNo" : null
+    "PaymentReference": "", "CustomerPhone": "", "CustomerEmail": "", "FullName": "", "DVCTRTid": null, "SeatNo" : null
 };
 
 var pendingBooking = {
