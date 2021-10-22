@@ -36,13 +36,12 @@ $(document).ready(function(){
                     method: "GET",
                     success: function(response, status, xhr){
                         //$("#confirm-booking").modal("hide");
-                        console.log(response);
                         booking["CustomerEmail"] = pending["CustomerEmail"];
                         booking["CustomerPhone"] = pending["CustomerPhone"];
                         booking["PaymentReference"] = response;
                         booking["SeatNo"] = pending["SeatNo"];
                         booking["DVCTRTid"] = pending["DVCTRTid"]
-                        payWithPaystack(response["ResponseData"], pending["AmountDue"]);
+                        payWithPaystack(response["ResponseData"], parseInt(pending["AmountDue"]));
                     }
                 });
             }
@@ -66,31 +65,37 @@ $(document).ready(function(){
 				]
 			},
 			callback: function(response) {
-                //after payment, store payment record and then make booking
-                console.log(response);
-                $.ajax({
-                    url: "http://localhost:55932/api/payment/store",
-                    method: "POST",
-                    data: {
-                        "AmountPaid" : response.amount, "TravelDayId" : pendingBooking["TravelDateId"], "VCTRTId" : pendingBooking["VCTRTid"],
-                        "PaymentReference" : response.reference, "CustomerName": booking["FullName"], "CustomerEmail": booking["Email"], "CustomerPhone": booking["Phone"]
-                    },
-                    success : function(response_data, status, xhr){
-                        //make booking
-                        $.ajax({
-                            url: "http://localhost:55932/api/booking/create",
-                            method: "POST",
-                            data: {
-                                "DVCTRTid" : booking["DVCTRTid"], "SeatNo": booking["SeatNo"], "AmountPaid": response.amount,
-                                "PaymentReference" : response.reference, "CustomerPhone": booking["CustomerPhone"],
-                                "CustomerEmail": booking["CustomerEmail"], "FullName" : booking["FullName"]
-                            },
-                            success : function(data, stat, xr){
-                                //process results from bookig attempt
-                            }
-                        });
-                    }
-                })
+                if(response.status == "success"){
+                    $.ajax({
+                        url: "http://localhost:55932/api/payment/store",
+                        method: "POST",
+                        data: {
+                            "AmountPaid" : amountDue, "TravelDayId" : pendingBooking["TravelDateId"], "VCTRTId" : pendingBooking["VCTRTid"],
+                            "PaymentReference" : response.reference, "CustomerName": booking["FullName"], "CustomerEmail": booking["Email"], "CustomerPhone": booking["Phone"]
+                        },
+                        success : function(response_data, status, xhr){
+                            //make booking
+                            $.ajax({
+                                url: "http://localhost:55932/api/booking/create",
+                                method: "POST",
+                                data: {
+                                    "DVCTRTid" : booking["DVCTRTid"], "SeatNo": booking["SeatNo"], "AmountPaid": response.amount,
+                                    "PaymentReference" : response.reference, "CustomerPhone": booking["CustomerPhone"],
+                                    "CustomerEmail": booking["CustomerEmail"], "FullName" : booking["FullName"]
+                                },
+                                success : function(data, stat, xr){
+                                    //process results from booking attempt
+                                    console.log(data);
+                                    
+                                    //open success modal (succesModal.show())
+                                }
+                            });
+                        }
+                    })
+                } else {
+                    alert(response.message);
+                }
+                
 			},
 			onClose: function(){
                 //self.location="verify.php?paymentReference="+paymentReference;
