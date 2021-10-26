@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="../assets/vendor/multi-select/css/multi-select.css">
     <link rel="stylesheet" href="../assets/vendor/datepicker/tempusdominus-bootstrap-4.css" />
     <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/libs/cute-alert-master/style.css"></script>
 </head>
 
 <body>
@@ -667,8 +668,25 @@ John Abraham</h5>
         </div>
     </div>
 
+    <div class="modal fade" role="dialog" id="confirm-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center">Confirm selection</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body" id="confirm-body"></div>
+                <div class="modal-footer">
+                    <button id="confirm-yes" class="btn btn-success">Yes</button>
+                    <button id="confirm-no" class="btn btn-danger">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Optional JavaScript -->
+    <script src="../assets/libs/cute-alert-master/cute-alert.js"></script>
     <script src="https://js.paystack.co/v1/inline.js"></script>
     <script src="../assets/vendor/jquery/jquery-3.3.1.min.js"></script>
     <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>

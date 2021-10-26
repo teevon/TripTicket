@@ -94,9 +94,9 @@ $(document).ready(function(){
                             var noSeat = '<div class="seat-box no-seat"></div>';
                             $("#seat-boundary .seat-row").last().append(noSeat);
                         } else {
-                            if(bookedSeats.indexOf(seats[r][c]) != -1)
+                            if(bookedSeats.indexOf(parseInt(seats[r][c])) != -1)
                               var seat = '<div class="seat-box booked-seat"><div class="seat-number">'+seats[r][c]+'</div></div>';
-                            else if(pendingSeats.indexOf(seats[r][c]) != -1)
+                            else if(pendingSeats.indexOf(parseInt(seats[r][c])) != -1)
                               var seat = '<div class="seat-box pending-seat"><div class="seat-number">'+seats[r][c]+'</div></div>';
                             else if(seats[r][c] == 'd')
                               var seat = '<div class="seat-box driver-seat"><div class="seat-number">'+seats[r][c]+'</div></div>';

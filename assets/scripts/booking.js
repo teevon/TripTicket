@@ -70,30 +70,60 @@ $(document).ready(function(){
                         url: "http://localhost:55932/api/payment/store",
                         method: "POST",
                         data: {
-                            "AmountPaid" : amountDue, "TravelDayId" : pendingBooking["TravelDateId"], "VCTRTId" : pendingBooking["VCTRTid"],
+                            "AmountPaid" : amountDue, "TravelDayId" : pendingBooking["TravelDateId"], "VCTRTId" : pendingBooking["VCTRTid"], "SeatNo": booking["SeatNo"],
                             "PaymentReference" : response.reference, "CustomerName": booking["FullName"], "CustomerEmail": booking["Email"], "CustomerPhone": booking["Phone"]
                         },
                         success : function(response_data, status, xhr){
-                            //make booking
-                            $.ajax({
-                                url: "http://localhost:55932/api/booking/create",
-                                method: "POST",
-                                data: {
-                                    "DVCTRTid" : booking["DVCTRTid"], "SeatNo": booking["SeatNo"], "AmountPaid": response.amount,
-                                    "PaymentReference" : response.reference, "CustomerPhone": booking["CustomerPhone"],
-                                    "CustomerEmail": booking["CustomerEmail"], "FullName" : booking["FullName"]
-                                },
-                                success : function(data, stat, xr){
-                                    //process results from booking attempt
-                                    console.log(data);
+                            if(xhr.status == 200){
+                                //make booking
+                                $.ajax({
+                                    url: "http://localhost:55932/api/booking/create",
+                                    method: "POST",
+                                    data: {
+                                        "DVCTRTid" : booking["DVCTRTid"], "SeatNo": booking["SeatNo"], "AmountPaid": response.amount,
+                                        "PaymentReference" : response.reference, "CustomerPhone": booking["CustomerPhone"],
+                                        "CustomerEmail": booking["CustomerEmail"], "FullName" : booking["FullName"]
+                                    },
+                                    success : function(data, stat, xr){
+                                        //process results from booking attempt
+                                        console.log(data);
+                                        cuteAlert({
+                                            type: "success",
+                                            title: "Booking Successful",
+                                            message: "Booking details have been sent to your email or phone",
+                                            buttonText: "Okay"
+                                          })
+                                    }
+                                });
+                            } else {
+                                console.log("Response Data: ");
+                                console.log(response_data);
+                                cuteAlert();
+                                payWithPaystack(paymentReference, amountDue);
+                                if(confirm("Would you like to retry payment?")){
                                     
-                                    //open success modal (succesModal.show())
+                                } else {
+                                    //show confirm modal
                                 }
-                            });
+                            }
                         }
                     })
                 } else {
                     alert(response.message);
+                    cuteAlert({
+                        type: "question",
+                        title: "Payment failed",
+                        message: "Would you like to retry payment?",
+                        closeStyle: "circle"
+                    }).then(
+                        function(success){
+                            payWithPaystack(paymentReference, amountDue);
+                        },
+                        function(failure){
+                            //Reset booking Time
+                        }
+                    );
+                    //payWithPaystack(paymentReference, amountDue);
                 }
                 
 			},
@@ -114,4 +144,22 @@ $(document).ready(function(){
             }
         });
     });
+
+    function ResetValues(){
+        booking["DVCTRTid"] = null;
+        booking["SeatNo"] = null;
+        booking["CustomerPhone"] = null;
+        booking["CustomerEmail"] = null;
+        booking["FullName"] = null;
+        pendingBooking["SeatNo"] = null;
+        pendingBooking["TravelDateId"] = null;
+        pendingBooking["VCTRTid"] = null;
+        pendingBooking["CustomerPhone"] = null;
+        pendingBooking["CustomerEmail"] = null;
+        pendingBooking["FullName"] = null;
+    }
+
+    function ResetFields(){
+        //
+    }
 });
