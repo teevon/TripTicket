@@ -481,7 +481,7 @@ John Abraham</h5>
                     <!-- ============================================================== -->
                     <div class="row">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                            <button id="vehicleType" tabindex="-1" data-toggle="dropdown" type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split">
+                            <button disabled id="vehicleType" tabindex="-1" data-toggle="dropdown" type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split">
                                 Vehicle Type
                             </button>
                             <div id="vehCat" class="dropdown-menu vehicleCategory">
@@ -503,7 +503,7 @@ John Abraham</h5>
                                     </div>
                                     <div class="form-group">
                                         <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
-                                            <input id="TravelDate" type="text" class="form-control datetimepicker-input travel-info" data-target="#datetimepicker4" />
+                                            <input disabled id="TravelDate" type="text" class="form-control datetimepicker-input travel-info" data-target="#datetimepicker4" />
                                             <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
                                             </div>
@@ -517,20 +517,12 @@ John Abraham</h5>
                             <div class="card">
                                 <h5 class="card-header">Time Slots</h5>
                                 <div class="card-body">
-                                    <button id="timeSlot" tabindex="-1" data-toggle="dropdown" type="button" class="btn btn-primary btn-block dropdown-toggle dropdown-toggle-split">
+                                    <button disabled id="timeSlot" tabindex="-1" data-toggle="dropdown" type="button" class="btn btn-primary btn-block dropdown-toggle dropdown-toggle-split">
                                      Pick a travel time
                                     </button>
                                     <div id="availableTimes" class="dropdown-menu timeSlots"></div>
-                                    <!-- <div id="availableTimes" class="dropdown-menu timeSlots">
-                                        <a href="#" class="dropdown-item">Action</a>
-                                         <div class="dropdown-divider"></div><a href="#" class="dropdown-item">Separated link</a> 
-                                    </div> -->
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <button id="btn-makePayment" class="btn btn-primary btn-block">Confirm Booking &raquo;</button>
                         </div>
                     </div>
                     <!-- ============================================================== -->
@@ -557,7 +549,6 @@ John Abraham</h5>
                     </div>
                 </div>
             </div>
-            <button id="testBtn" class="btn btn-primary btn-block"> Test</button>
             <!-- ============================================================== -->
             <!-- end footer -->
             <!-- ============================================================== -->
@@ -569,58 +560,6 @@ John Abraham</h5>
       </div>
     </template>
 
-    <div class="modal fade" role="dialog" id="confirm-booking">
-       <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title text-center">Confirm Entries</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="jumbotron">
-                    <div class="container">
-                        <div class="row mb-4">
-                            <div class="col-md-3"><p class="lead">Fullname:</p></div>
-                            <div class="col-md-9"><p class="pt-2 text-primary"><span id="confirm-fullname"></span></p></div>
-                        </div>
-                        <div class="row mb-4">
-                            <div class="col-md-3"><p class="lead">Phone:</p></div>
-                            <div class="col-md-9"><p id="confirm-phone" class="pt-2 text-primary"></p></div>
-                        </div>
-                        <div class="row mb-4">
-                            <div class="col-md-3"><p class="lead">Email:</p></div>
-                            <div class="col-md-9"><p id="confirm-email" class="pt-2 text-primary"></p></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6"><p class="text-center text-success">From</p></div>
-                            <div class="col-md-6"><p class="text-center text-success">Destination</p></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6"><p class="lead text-center" id="confirm-state-from"></p></div>
-                            <div class="col-md-6"><p class="lead text-center" id="confirm-state-to"></p></div>
-                        </div>
-                        <div class="row mb-4">
-                            <div class="col-md-6"><p class="text-center" id="confirm-city-areaname-fro"></p></div>
-                            <div class="col-md-6"><p class="text-center" id="confirm-city-areaname-to"></p></div>
-                        </div>
-                        <div class="row mb-4">
-                            <div class="col-md-5"><p class="lead">Travel Date:</p></div>
-                            <div class="col-md-7"><p id="confirm-travelDate" class="pt-2 text-primary"></p></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12"><p class="lead text-center"><span id="confirm-vehicleCategory"></span> => <span id="confirm-vehicleCost" class="text-danger"></span></p></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <a href="#" class="btn btn-secondary mr-auto" data-dismiss="modal">Go Back</a>
-                <button id="paystack-pay" class="btn btn-primary">Make Payment</button>
-            </div>
-        </div>
-       </div>
-    </div>
-
     <div class="modal fade" role="dialog" id="seat-selection">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -631,7 +570,7 @@ John Abraham</h5>
                 <div class="modal-body" id="seat-boundary">
                 </div>
                 <div class="modal-footer">
-                    <button id="seat-selected" class="btn btn-info btn-block">Proceed</button>
+                    <button id="seat-selected" class="btn btn-info btn-block">Next</button>
                 </div>
             </div>
         </div>
@@ -662,26 +601,65 @@ John Abraham</h5>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="make-payment" class="btn btn-info btn-block">Make Payment</button>
+                    <button id="confirm-details" class="btn btn-info btn-block">Confirm Data</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" role="dialog" id="confirm-modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title text-center">Confirm selection</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body" id="confirm-body"></div>
-                <div class="modal-footer">
-                    <button id="confirm-yes" class="btn btn-success">Yes</button>
-                    <button id="confirm-no" class="btn btn-danger">Yes</button>
+    <div class="modal fade" role="dialog" id="confirm-booking">
+       <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center">Confirm Booking Info</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="jumbotron">
+                    <div class="container">
+                        <div class="row mb-2">
+                            <div class="col-md-3"><p class="lead">Fullname:</p></div>
+                            <div class="col-md-9"><p class="pt-2 text-primary"><span id="confirm-fullname"></span></p></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3"><p class="lead">Phone:</p></div>
+                            <div class="col-md-9"><p id="confirm-phone" class="pt-2 text-primary"></p></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3"><p class="lead">Email:</p></div>
+                            <div class="col-md-9"><p id="confirm-email" class="pt-2 text-primary"></p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6"><p class="text-center text-success">From</p></div>
+                            <div class="col-md-6"><p class="text-center text-success">Destination</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6"><p class="lead text-center" id="confirm-state-from"></p></div>
+                            <div class="col-md-6"><p class="lead text-center" id="confirm-state-to"></p></div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-6"><p class="text-center" id="confirm-city-areaname-fro"></p></div>
+                            <div class="col-md-6"><p class="text-center" id="confirm-city-areaname-to"></p></div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-5"><p class="lead">Travel Date:</p></div>
+                            <div class="col-md-7"><p id="confirm-travelDate" class="pt-2 text-primary"></p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12"><p class="lead text-center"><span id="confirm-vehicleCategory"></span> => <span id="confirm-vehicleCost" class="text-danger"></span></p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12"><p class="lead text-center text-info"><span>Seat No. </span><span id="confirm-seatNo"></span></p></div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-secondary mr-auto" data-dismiss="modal">Go Back</a>
+                <button id="make-payment" class="btn btn-primary">Make Payment</button>
+            </div>
         </div>
+       </div>
     </div>
 
 

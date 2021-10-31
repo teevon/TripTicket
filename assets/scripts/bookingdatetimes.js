@@ -2,28 +2,6 @@ var travelDates = [];
 var travelDateId = null;
 var vctrtId = null;
 $(document).ready(function(){
-    function LoadBookingDates(){
-        $.ajax({
-            url: "http://localhost:55932/api/booking/days",
-            method: "GET",
-            success: function(response_data, status, xhr){
-                var data_size = response_data.length;
-                var min_date = response_data[0]["TravelDate"];
-                min_date = min_date.substring(0, min_date.indexOf("T"));
-                min_date = min_date.split("-");
-                var max_date = response_data[data_size - 1]["TravelDate"];
-                max_date = max_date.substring(0, max_date.indexOf("T"));
-                max_date = max_date.split("-");
-                travelDates = response_data;
-                travelDateId = response_data[0]["Id"];
-                $('#datetimepicker4').datetimepicker('minDate', new Date(parseInt(min_date[0]), parseInt(min_date[1])-1, parseInt(min_date[2])));
-                $('#datetimepicker4').datetimepicker('maxDate', new Date(parseInt(max_date[0]), parseInt(max_date[1])-1, parseInt(max_date[2])));
-                console.log(travelDates);
-            },
-        })
-    }
-    LoadBookingDates();
-
     function AmOrPm(timespan){
         timespan = timespan.toString();
         var ts = timespan.split(":");
@@ -42,17 +20,17 @@ $(document).ready(function(){
             success: function(response_data, status, xhr){
                 if(response_data.length > 0){
                     response_data.forEach(ts => {
-                    var tSlot = $('<a href="#" class="dropdown-item times" data-vctrtId='+ts["VCTRTiD"]+' data-timeslot='+ts["TimeSlot"]+'>'+ AmOrPm(ts['TimeSlot']) +'</a>');
-                    $("#timeSlot").siblings(".timeSlots").first().append(tSlot);
+                        var tSlot = $('<a href="#" class="dropdown-item times" data-vctrtId='+ts["VCTRTiD"]+' data-timeslot='+ts["TimeSlot"]+'>'+ AmOrPm(ts['TimeSlot']) +'</a>');
+                        $("#timeSlot").siblings(".timeSlots").first().append(tSlot);
                     });
                 }
-            }
+            } 
         });
     }
 
     $("#timeSlot").on("click", function(){
         $(this).siblings(".timeSlots").first().html("");
-        LoadTimeSlots(parseInt($("#vctrId").val()), travelDateId);
+        LoadTimeSlots(vctr["Id"], travelDateId);
     });
 
     $(".timeSlots").on("click", ".times", function(e){
@@ -62,7 +40,6 @@ $(document).ready(function(){
         $("#seat-timeslot").text($(this).text());
         vctrtId = parseInt($(this).attr("data-vctrtId"));
         pendingBooking["VCTRTid"] = vctrtId;
-        pendingBooking["TravelDateId"] = travelDateId;
         $("#timeSlot").click();
 
         $("#seat-selection").modal("show"); //Seat selection modal shows
@@ -111,6 +88,8 @@ $(document).ready(function(){
         });
     });
 
+    
+
     $("#seat-boundary").on("click", ".seat-row .unbooked-seat", function(e){
         $("#seat-boundary .seat-row .unbooked-seat").removeClass("selected");
         $(this).addClass("selected");
@@ -122,20 +101,4 @@ $(document).ready(function(){
         $("#contact-information").modal("show");
     });
 
-    $("#datetimepicker4").on("change.datetimepicker", function(e) {
-        let bookingDay = ""+ e.date["_d"].getDate() + "";
-        bookingDay = bookingDay.length == 1 ? "0"+bookingDay : bookingDay;
-        bookingDate = e.date["_d"].getFullYear()+"-"+(e.date["_d"].getMonth() + 1)+"-"+bookingDay;
-        console.log(bookingDate);
-        var res = travelDates.filter(obj => Object.values(obj).some(val => val.toString().includes(bookingDate)));
-        console.log(res);
-        if(res.length == 1){
-            travelDateId = parseInt(res[0]["Id"]);
-            pendingBooking["TravelDateId"] = travelDateId;
-        }
-    });
-
-    $("#testBtn").on("click", function(){
-        console.log( "VCTRid = " +$("#vctrId").val());
-    });
 });

@@ -7,13 +7,7 @@ sends notification of booking to email and phone
 $(document).ready(function(){
 
     $("#make-payment").on("click", function(e){
-        pendingBooking["CustomerPhone"] = $("#Phone").val();
-        pendingBooking["CustomerEmail"] = $("#Email").val();
-        booking["FullName"] = $("#FullName").val();
-        $("#contact-information").modal("hide");
-        $("#Phone").val("");
-        $("#Email").val("");
-        $("#FullName").val("");
+        $("#confirm-booking").modal("hide");
         payAndBook();
     });
 
@@ -47,6 +41,8 @@ $(document).ready(function(){
             }
         });
     }
+
+    // Set up confirm modal before paying
 
     function payWithPaystack(paymentReference, amountDue){
         //validate booking parameters first before initiating payment
@@ -86,6 +82,9 @@ $(document).ready(function(){
                                     },
                                     success : function(data, stat, xr){
                                         //process results from booking attempt
+                                        $("#Phone").val("");
+                                        $("#Email").val("");
+                                        $("#FullName").val("");
                                         console.log(data);
                                         cuteAlert({
                                             type: "success",
@@ -109,7 +108,6 @@ $(document).ready(function(){
                         }
                     })
                 } else {
-                    alert(response.message);
                     cuteAlert({
                         type: "question",
                         title: "Payment failed",
