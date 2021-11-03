@@ -85,13 +85,14 @@ $(document).ready(function(){
                                         $("#Phone").val("");
                                         $("#Email").val("");
                                         $("#FullName").val("");
-                                        console.log(data);
                                         cuteAlert({
                                             type: "success",
                                             title: "Booking Successful",
                                             message: "Booking details have been sent to your email or phone",
                                             buttonText: "Okay"
-                                          })
+                                          }).then(() => {
+                                            self.location = "booking.php?r"
+                                          });
                                     }
                                 });
                             } else {
