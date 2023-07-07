@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="../assets/vendor/multi-select/css/multi-select.css">
     <link rel="stylesheet" href="../assets/vendor/datepicker/tempusdominus-bootstrap-4.css" />
     <link rel="stylesheet" href="../assets/css/styles.css" />
-    <link rel="stylesheet" href="../assets/libs/cute-alert-master/style.css"></script>
+    <link rel="stylesheet" href="../assets/libs/cute-alert-master/style.css">
 </head>
 
 <body>
